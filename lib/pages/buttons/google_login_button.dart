@@ -25,7 +25,7 @@ class GoogleLoginButton extends StatelessWidget {
           style: TextStyle(color: Colors.white, fontSize: 16),
         ),
         style: ElevatedButton.styleFrom(
-          primary: Colors.redAccent,
+          backgroundColor: Colors.redAccent,
         ),
       ),
     );

@@ -15,7 +15,7 @@ class RegisterButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
-          primary: Colors.green,
+          backgroundColor: Colors.green,
         ),
         onPressed: () {
           onPressed?.call();

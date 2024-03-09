@@ -2,9 +2,7 @@ import 'package:appiot/events/login_event.dart';
 import 'package:appiot/repositories/user_repository.dart';
 import 'package:appiot/states/login_state.dart';
 import 'package:appiot/validators/validators.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rxdart/rxdart.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final UserRepository _userRepository;
