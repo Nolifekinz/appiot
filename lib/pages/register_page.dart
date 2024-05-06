@@ -40,68 +40,66 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Đăng ký')),
-      body: Center(
-        child: BlocProvider<RegisterBloc>(
-          create: (context) => _registerBloc,
-          child: BlocBuilder<RegisterBloc, RegisterState>(
-            builder: (context, registerState) {
-              if (registerState.isFailure) {
-                print('Đăng ký thất bại');
-              } else if (registerState.isSubmitting) {
-                print('Đang tiến hành đăng ký...');
-              } else if (registerState.isSuccess) {
-                // Thực hiện các hành động khi đăng ký thành công
-              }
-              return Padding(
-                padding: EdgeInsets.all(20),
-                child: Form(
-                  child: ListView(
-                    children: <Widget>[
-                      TextFormField(
-                        controller: _emailController,
-                        decoration: InputDecoration(
-                          icon: Icon(Icons.email),
-                          labelText: 'Email',
-                        ),
-                        keyboardType: TextInputType.emailAddress,
-                        autocorrect: false,
-                        autovalidateMode: AutovalidateMode.always,
-                        validator: (_) {
-                          return registerState.isValidEmail ? null : 'Email không hợp lệ';
-                        },
-                      ),
-                      TextFormField(
-                        controller: _passwordController,
-                        decoration: InputDecoration(
-                          icon: Icon(Icons.lock),
-                          labelText: 'Mật khẩu',
-                        ),
-                        obscureText: true,
-                        autocorrect: false,
-                        autovalidateMode: AutovalidateMode.always,
-                        validator: (_) {
-                          return registerState.isValidPassword ? null : 'Mật khẩu không hợp lệ';
-                        },
-                      ),
-                      Padding(padding: EdgeInsets.only(top: 20)),
-                      RegisterButton(
-                        onPressed: () {
-                          if (isRegisterButtonEnabled(registerState)) {
-                            _registerBloc.add(
-                              RegisterEventPressed(
-                                email: _emailController.text,
-                                password: _passwordController.text,
-                              ),
-                            );
-                          }
-                        },
-                      ),
-                    ],
+      body: BlocProvider<RegisterBloc>(
+        create: (context) => _registerBloc,
+        child: BlocBuilder<RegisterBloc, RegisterState>(
+          builder: (context, registerState) {
+            if (registerState.isFailure) {
+              print('Đăng ký thất bại');
+            } else if (registerState.isSubmitting) {
+              print('Đang tiến hành đăng ký...');
+            } else if (registerState.isSuccess) {
+              // Thực hiện các hành động khi đăng ký thành công
+            }
+            return Padding(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center, // Căn giữa theo chiều dọc
+                children: <Widget>[
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.email),
+                      labelText: 'Email',
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                    autocorrect: false,
+                    autovalidateMode: AutovalidateMode.always,
+                    validator: (_) {
+                      return registerState.isValidEmail ? null : 'Email không hợp lệ';
+                    },
                   ),
-                ),
-              );
-            },
-          ),
+                  SizedBox(height: 30),
+                  TextFormField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.lock),
+                      labelText: 'Mật khẩu',
+                    ),
+                    obscureText: true,
+                    autocorrect: false,
+                    autovalidateMode: AutovalidateMode.always,
+                    validator: (_) {
+                      return registerState.isValidPassword ? null : 'Mật khẩu không hợp lệ';
+                    },
+                  ),
+                  SizedBox(height: 80),
+                  RegisterButton(
+                    onPressed: () {
+                      if (isRegisterButtonEnabled(registerState)) {
+                        _registerBloc.add(
+                          RegisterEventPressed(
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );

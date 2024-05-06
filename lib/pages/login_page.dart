@@ -75,15 +75,18 @@ class _LoginPageState extends State<LoginPage> {
           } else if (loginState.isSubmitting) {
             print('Logging in');
           } else if (loginState.isSuccess) {
-            Navigator.of(context)
-                .pushReplacement(MaterialPageRoute(builder: (_) => MyHomePage()));
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (_) => MyHomePage()));
           }
         },
         child: Padding(
           padding: EdgeInsets.all(20.0),
           child: Form(
-            child: ListView(
+            child: Column(
+              mainAxisAlignment:
+                  MainAxisAlignment.center, // Căn giữa theo chiều dọc
               children: <Widget>[
+                Image.asset('assets/images/Logo.jpg', width: 100, height: 100),
                 TextFormField(
                   controller: _emailController,
                   decoration: InputDecoration(
@@ -117,14 +120,27 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
-                      LoginButton(
-                        onPressed: () => _onLoginEmailAndPassword(),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Expanded(
+                              child: LoginButton(
+                                onPressed: () => _onLoginEmailAndPassword(),
+                              ),
+                            ),
+                            SizedBox(width: 10), // Khoảng cách giữa hai nút
+                            Expanded(
+                              child: RegisterUserButton(
+                                userRepository: widget._userRepository,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       Padding(padding: EdgeInsets.only(top: 10)),
                       GoogleLoginButton(),
-                      Padding(padding: EdgeInsets.only(top: 10)),
-                      RegisterUserButton(
-                          userRepository: widget._userRepository),
                     ],
                   ),
                 ),

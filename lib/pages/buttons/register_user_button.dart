@@ -29,14 +29,15 @@ class RegisterUserButton extends StatelessWidget {
           Navigator.of(context).push(
             MaterialPageRoute(builder: (context) {
               return BlocProvider<RegisterBloc>(
-                create: (context) => RegisterBloc(userRepository: userRepository),
+                create: (context) =>
+                    RegisterBloc(userRepository: userRepository),
                 child: RegisterPage(userRepository: userRepository),
               );
             }),
           );
         },
         child: Text(
-          'Register a new Account',
+          'Register',
           style: TextStyle(fontSize: 16, color: Colors.white),
         ),
       ),

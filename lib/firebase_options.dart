@@ -25,15 +25,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -52,6 +46,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '995514231101',
     projectId: 'nckh-1ec7b',
     authDomain: 'nckh-1ec7b.firebaseapp.com',
+    databaseURL: 'https://nckh-1ec7b-default-rtdb.firebaseio.com',
     storageBucket: 'nckh-1ec7b.appspot.com',
     measurementId: 'G-FYSJV2W4EQ',
   );
@@ -61,6 +56,7 @@ class DefaultFirebaseOptions {
     appId: '1:995514231101:android:610b2db5cd4bf87b4efd54',
     messagingSenderId: '995514231101',
     projectId: 'nckh-1ec7b',
+    databaseURL: 'https://nckh-1ec7b-default-rtdb.firebaseio.com',
     storageBucket: 'nckh-1ec7b.appspot.com',
   );
 
@@ -69,8 +65,34 @@ class DefaultFirebaseOptions {
     appId: '1:995514231101:ios:24e25899cb2a40054efd54',
     messagingSenderId: '995514231101',
     projectId: 'nckh-1ec7b',
+    databaseURL: 'https://nckh-1ec7b-default-rtdb.firebaseio.com',
     storageBucket: 'nckh-1ec7b.appspot.com',
+    androidClientId: '995514231101-1s3m63bcie4drqqfjb1j4jgcmf02aaqg.apps.googleusercontent.com',
     iosClientId: '995514231101-mfhusk1fhlae691s12an71mnf456alli.apps.googleusercontent.com',
     iosBundleId: 'com.example.appiot',
   );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyCkmWSzAxzX0oNzQjBecGjXiMdmroryR4w',
+    appId: '1:995514231101:ios:24e25899cb2a40054efd54',
+    messagingSenderId: '995514231101',
+    projectId: 'nckh-1ec7b',
+    databaseURL: 'https://nckh-1ec7b-default-rtdb.firebaseio.com',
+    storageBucket: 'nckh-1ec7b.appspot.com',
+    androidClientId: '995514231101-1s3m63bcie4drqqfjb1j4jgcmf02aaqg.apps.googleusercontent.com',
+    iosClientId: '995514231101-mfhusk1fhlae691s12an71mnf456alli.apps.googleusercontent.com',
+    iosBundleId: 'com.example.appiot',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyC8cpOjABwcN7mEOvtuNI1FwV-3-3BDKk0',
+    appId: '1:995514231101:web:45e84936993b98574efd54',
+    messagingSenderId: '995514231101',
+    projectId: 'nckh-1ec7b',
+    authDomain: 'nckh-1ec7b.firebaseapp.com',
+    databaseURL: 'https://nckh-1ec7b-default-rtdb.firebaseio.com',
+    storageBucket: 'nckh-1ec7b.appspot.com',
+    measurementId: 'G-J6GXMDEEKE',
+  );
+
 }

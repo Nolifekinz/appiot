@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '/pages/bedroom_page.dart';
 import '/pages/livingroom_page.dart';
 import '/pages/kitchen_page.dart';
+import 'automation_page.dart';
+
 class MyHomePage extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -26,10 +28,11 @@ class _MyHomePageState extends State<MyHomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Smart Home'),
+        title: Text('Smart Home', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.blue,
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.exit_to_app),
+            icon: Icon(Icons.exit_to_app, color: Colors.white),
             onPressed: (){
               BlocProvider.of<AuthenticationBloc>(context).add(AuthenticationEventLoggedOut());
             },
@@ -38,11 +41,15 @@ class _MyHomePageState extends State<MyHomePage>
         bottom: TabBar(
           controller: _tabController,
           isScrollable: true,
+          indicatorColor: Colors.white,
+          labelColor: Colors.white,
+          unselectedLabelColor: Colors.white.withOpacity(0.7),
+          indicatorWeight: 2.0,
           tabs: [
             Tab(text: 'Living room'),
             Tab(text: 'Kitchen'),
             Tab(text: 'Bedroom'),
-            Tab(text: 'Bathroom'),
+            Tab(text: 'Automation Page'),
           ],
         ),
       ),
@@ -63,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage>
           ),
           Container(
             alignment: Alignment.center,
-            child: Text('Bathroom Content'),
+            child: AutomationPage(),
           ),
         ],
       ),

@@ -1,3 +1,4 @@
+import 'package:appiot/api/firebase_api.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -12,10 +13,18 @@ import 'package:appiot/pages/splash_page.dart';
 import 'package:appiot/states/authentication_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '/pages/home_page.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+// final navigatorKey = GlobalKey<NavigatorState>();
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await FirebaseApi().initNotifications();
+  // FirebaseApi().monitorFirestoreChanges();
+  FirebaseApi().monitorDatabaseChanges();
   Bloc.observer = SimpleBlocObserver();
+
   runApp(MyApp());
 }
 
@@ -31,6 +40,7 @@ class MyApp extends StatelessWidget {
           ..add(AuthenticationEventStarted()),
         child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (context, authenticationState) {
+            print('Current Authentication State: $authenticationState');
             if (authenticationState is AuthenticationStateSuccess) {
               return MyHomePage();
             } else if (authenticationState is AuthenticationStateFailure) {
@@ -46,3 +56,10 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
+// Future<void> subscribeToTopic() async {
+//   FirebaseMessaging messaging = FirebaseMessaging.instance;
+//   await messaging.subscribeToTopic('gasTemperatureAlert');
+//   print('Subscribed to gasTemperatureAlert topic');
+// }
