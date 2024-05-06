@@ -11,7 +11,7 @@ class _LivingRoomPage extends State<LivingRoomPage> {
   bool isSwitched1 = false;
   bool isSwitched2 = false;
   bool isSwitched3 = false;
-  final _database = FirebaseDatabase.instance.reference();
+  final _database = FirebaseDatabase.instance.ref();
 
   int _temperature = 0;
   int _humidity = 0;
@@ -19,9 +19,38 @@ class _LivingRoomPage extends State<LivingRoomPage> {
   @override
   void initState() {
     super.initState();
-    // Start monitoring changes in the temperature and humidity data
     monitorTemperatureChanges();
     monitorHumidityChanges();
+    _loadFanStatus();
+    _loadLEDStatus();
+    _loadNOTIFIStatus();
+  }
+
+  void _loadFanStatus() async {
+    DataSnapshot snapshot = await _database.child('FAN_STATUS').get();
+    if (snapshot.value != null) {
+      setState(() {
+        isSwitched3 = snapshot.value as bool;
+      });
+    }
+  }
+
+  void _loadLEDStatus() async {
+    DataSnapshot snapshot = await _database.child('LED_STATUS').get();
+    if (snapshot.value != null) {
+      setState(() {
+        isSwitched1 = snapshot.value as bool;
+      });
+    }
+  }
+
+  void _loadNOTIFIStatus() async {
+    DataSnapshot snapshot = await _database.child('NOTIFI').get();
+    if (snapshot.value != null) {
+      setState(() {
+        isSwitched2 = snapshot.value as bool;
+      });
+    }
   }
 
   void monitorTemperatureChanges() {
@@ -80,7 +109,7 @@ class _LivingRoomPage extends State<LivingRoomPage> {
         onChanged: (value) {
           setState(() {
             isSwitched1 = value;
-            _updateLEDStatus();
+            _database.child('LED_STATUS').set(isSwitched1);
           });
         },
         additionalText: "Light",
@@ -92,9 +121,22 @@ class _LivingRoomPage extends State<LivingRoomPage> {
         onChanged: (value) {
           setState(() {
             isSwitched3 = value;
+            _database.child('FAN_STATUS').set(isSwitched3);
           });
         },
         additionalText: "Ceiling Fan",
+      ),
+      _buildItem(
+        icon: FontAwesomeIcons.triangleExclamation,
+        color: Colors.red,
+        switchValue: isSwitched2,
+        onChanged: (value) {
+          setState(() {
+            isSwitched2 = value;
+            _database.child('NOTIFI').set(isSwitched2);
+          });
+        },
+        additionalText: "Alert Notification",
       ),
     ];
   }
@@ -142,10 +184,5 @@ class _LivingRoomPage extends State<LivingRoomPage> {
         ),
       ),
     );
-  }
-
-  void _updateLEDStatus() {
-    String status = isSwitched1 ? 'on' : 'off';
-    _database.child('LED_STATUS').set(status);
   }
 }

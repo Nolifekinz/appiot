@@ -20,6 +20,16 @@ class FirebaseApi {
     print('Data: ${message.data}');
   }
 
+  Future<bool?> getNotificationStatus() async {
+    final snapshot = await _database.child('NOTIFI').once();
+    if (snapshot.snapshot.exists) {
+      return snapshot.snapshot.value as bool;
+    } else {
+      print("NOTIFI data does not exist in Firebase");
+      return null;
+    }
+  }
+
   void sendNotification() async {
     // Tạo một instance của FlutterRingtonePlayer
     final FlutterRingtonePlayer ringtonePlayer = FlutterRingtonePlayer();
@@ -48,19 +58,26 @@ class FirebaseApi {
     await _localNotifications.show(
       0,
       'Cảnh báo: Gas temperature vượt ngưỡng',
-      'Gas temperature đã vượt quá ngưỡng an toàn.',
+      'Gas temperature: ' + temp.toString(),
       platformChannelSpecifics,
     );
   }
 
+  int temp = 0;
   void monitorDatabaseChanges() {
     _database.child('gas').onValue.listen((event) {
-      final value = event.snapshot.value as Map<dynamic, dynamic>;
-      final temperature = value['t'] as int;
-      if (temperature > 50) {
-        print("changeeeeeeeeeeeeeeeeeee");
-        sendNotification();
-      }
+      final gasData = event.snapshot.value as Map<dynamic, dynamic>;
+      final temperature = gasData['t'] as int;
+      Future<bool?> notificationStatus = getNotificationStatus();
+      notificationStatus.then((value) {
+        if (value != null && value) {
+          if (temperature > 50) {
+            temp = temperature;
+            print("changeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+            sendNotification();
+          }
+        }
+      });
     });
   }
 

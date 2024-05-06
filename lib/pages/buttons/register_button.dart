@@ -19,7 +19,7 @@ class RegisterButton extends StatelessWidget {
           backgroundColor: Colors.green,
         ),
         onPressed: () {
-          onPressed?.call();
+          onPressed.call();
           // Navigate back
           Navigator.of(context).pop();
         },
