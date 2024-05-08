@@ -5,11 +5,7 @@ import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 
 class FirebaseApi {
   final _firebaseMessaging = FirebaseMessaging.instance;
-  final _database = FirebaseDatabase.instance.reference();
-  final _androidChannel = const AndroidNotificationChannel(
-      'high_importance_channel', 'High_Importance_Notifications',
-      description: 'This channel is used for important notifications',
-      importance: Importance.defaultImportance);
+  final _database = FirebaseDatabase.instance.ref();
 
   final _localNotifications = FlutterLocalNotificationsPlugin();
 
@@ -63,17 +59,16 @@ class FirebaseApi {
     );
   }
 
-  int temp = 0;
+  double temp = 0.0;
   void monitorDatabaseChanges() {
-    _database.child('gas').onValue.listen((event) {
-      final gasData = event.snapshot.value as Map<dynamic, dynamic>;
-      final temperature = gasData['t'] as int;
+    _database.child('Gas').onValue.listen((event) {
+      final temperature = event.snapshot.value as double;
       Future<bool?> notificationStatus = getNotificationStatus();
       notificationStatus.then((value) {
         if (value != null && value) {
-          if (temperature > 50) {
+          if (temperature > 1000.0) {
             temp = temperature;
-            print("changeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+            print("Temperature change detected: $temperature");
             sendNotification();
           }
         }

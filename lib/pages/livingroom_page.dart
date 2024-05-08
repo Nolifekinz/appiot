@@ -13,9 +13,9 @@ class _LivingRoomPage extends State<LivingRoomPage> {
   bool isSwitched3 = false;
   final _database = FirebaseDatabase.instance.ref();
 
-  int _temperature = 0;
-  int _humidity = 0;
-
+  double _temperature = 0;
+  double _humidity = 0;
+  int numberpeople = 0;
   @override
   void initState() {
     super.initState();
@@ -24,13 +24,14 @@ class _LivingRoomPage extends State<LivingRoomPage> {
     _loadFanStatus();
     _loadLEDStatus();
     _loadNOTIFIStatus();
+    monitorPeopleChanges();
   }
 
   void _loadFanStatus() async {
     DataSnapshot snapshot = await _database.child('FAN_STATUS').get();
     if (snapshot.value != null) {
       setState(() {
-        isSwitched3 = snapshot.value as bool;
+        isSwitched3 = snapshot.value == 1 ? true : false;
       });
     }
   }
@@ -53,10 +54,18 @@ class _LivingRoomPage extends State<LivingRoomPage> {
     }
   }
 
+  void monitorPeopleChanges() {
+    _database.child('NumberPeople').onValue.listen((event) {
+      setState(() {
+        numberpeople = event.snapshot.value as int;
+      });
+    });
+  }
+
   void monitorTemperatureChanges() {
     _database.child('temperature').onValue.listen((event) {
       setState(() {
-        _temperature = event.snapshot.value as int;
+        _temperature = (event.snapshot.value as num).toDouble();
       });
     });
   }
@@ -64,7 +73,7 @@ class _LivingRoomPage extends State<LivingRoomPage> {
   void monitorHumidityChanges() {
     _database.child('humidity').onValue.listen((event) {
       setState(() {
-        _humidity = event.snapshot.value as int;
+        _humidity = (event.snapshot.value as num).toDouble();
       });
     });
   }
@@ -94,6 +103,12 @@ class _LivingRoomPage extends State<LivingRoomPage> {
   List<Widget> _buildItems() {
     return [
       _buildItem(
+        icon: Icons.person,
+        color: Colors.purple,
+        additionalText:
+            "Number people\n in the room: " + numberpeople.toString(),
+      ),
+      _buildItem(
         icon: Icons.cloud,
         color: Colors.blue,
         additionalText: "Temperature:   " +
@@ -102,18 +117,18 @@ class _LivingRoomPage extends State<LivingRoomPage> {
             _humidity.toString() +
             "%",
       ),
-      _buildItem(
-        icon: Icons.lightbulb,
-        color: const Color.fromARGB(255, 255, 230, 2),
-        switchValue: isSwitched1,
-        onChanged: (value) {
-          setState(() {
-            isSwitched1 = value;
-            _database.child('LED_STATUS').set(isSwitched1);
-          });
-        },
-        additionalText: "Light",
-      ),
+      // _buildItem(
+      //   icon: Icons.lightbulb,
+      //   color: const Color.fromARGB(255, 255, 230, 2),
+      //   switchValue: isSwitched1,
+      //   onChanged: (value) {
+      //     setState(() {
+      //       isSwitched1 = value;
+      //       _database.child('LED_STATUS').set(isSwitched1);
+      //     });
+      //   },
+      //   additionalText: "Light",
+      // ),
       _buildItem(
         icon: FontAwesomeIcons.fan,
         color: Colors.green,
@@ -121,7 +136,7 @@ class _LivingRoomPage extends State<LivingRoomPage> {
         onChanged: (value) {
           setState(() {
             isSwitched3 = value;
-            _database.child('FAN_STATUS').set(isSwitched3);
+            _database.child('FAN_STATUS').set(isSwitched3 ? 1 : 0);
           });
         },
         additionalText: "Ceiling Fan",
